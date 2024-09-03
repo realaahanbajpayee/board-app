@@ -1,0 +1,58 @@
+<div class="h-screen flex flex-col">
+    <div class="" style="background-color: #083344;">
+        <div class="flex object-center">
+            <div class="flex items-center m-2">
+                <p class="dos-cap p-2 m-2 text-center" style="color: #eef0f2;">Tasks and Boards</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex flex-col flex-grow p-4">
+        <div class="mb-4 flex justify-between items-center">
+            <input [(ngModel)]="board.name" class="text-xl font-semibold bg-transparent border-none" />
+            <button (click)="addColumn()" class="bg-blue-500 text-white p-2 rounded">Add Column</button>
+        </div>
+
+        <div class="flex-grow overflow-x-auto">
+            <div class="flex flex-grow dos" cdkDropListGroup>
+                <div class="flex flex-col flex-grow flex-basis-0 min-w-[300px] mx-4 p-6 rounded-lg bg-opacity-50 shadow-lg"
+                    *ngFor="let column of board.columns; let i = index" style="background-color: #8ACDEA;">
+                    <div class="flex justify-between items-center mb-4">
+                        <input [(ngModel)]="column.name"
+                            class="text-lg font-bold uppercase bg-transparent border-none" />
+                        <button (click)="deleteColumn(i)" class="" style="color: #8C4843;">Delete</button>
+                    </div>
+
+                    <div class="flex-grow overflow-y-auto" cdkDropList [cdkDropListData]="column.tasks"
+                        (cdkDropListDropped)="drop($event)">
+                        <div class="task mb-4 font-medium" *ngFor="let item of column.tasks; let j = index" cdkDrag
+                            (click)="openEditDeleteModal(i, j)">
+                            {{ item }}
+                        </div>
+                    </div>
+
+                    <div class="mt-4 flex">
+                        <input [(ngModel)]="newTask[i]" class="flex-grow p-2 border rounded" placeholder="New task" />
+                        <button (click)="addTask(i)" class="text-white p-2 rounded ml-2" style="background-color: #9e643c;">Add Task</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center pt-4" style="background-color: #083344; color: #eef0f2;">
+        <p class="text-lg">Made with <span class="text-red-500">&hearts;</span> by Taskmaster &copy;</p>
+    </footer>
+</div>
+
+<div class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75" *ngIf="selectedTask !== null">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+        <h2 class="text-xl font-semibold mb-4">Edit/Delete Task</h2>
+        <input [(ngModel)]="editedTask" class="w-full p-2 border rounded mb-4" placeholder="Edit task" />
+        <div class="flex justify-between">
+            <button (click)="saveTask()" class="bg-blue-500 text-white p-2 rounded">Save</button>
+            <button (click)="deleteTask()" class="bg-red-500 text-white p-2 rounded">Delete</button>
+            <button (click)="closeModal()" class="bg-gray-300 text-black p-2 rounded">Cancel</button>
+        </div>
+    </div>
+</div>
